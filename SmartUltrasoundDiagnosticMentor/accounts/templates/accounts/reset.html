@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reset Password</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'accounts/signup.css' %}" />
+</head>
+
+<body>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                <span class="close-btn">&times;</span>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="wrapper2">
+        <form method="POST">
+            {% csrf_token %}
+            <h1>Reset Password</h1>
+
+            <div class="input-box" style="width:100%;">
+                <input type="email" name="email" placeholder="Email *" required />
+                <i class='bx bx-user'></i>
+            </div>
+
+            <div class="input-box" style="width:100%;">
+                <input id="passwordInput" type="password" placeholder="New Password" name="pass" required>
+                <span class="toggle-icon" id="togglePassword"></span>
+            </div>
+
+            <div class="input-box" style="width:100%;">
+                <input id="passwordInput2" type="password" placeholder="Confirm Password" name="pass2" required>
+                <span class="toggle-icon" id="togglePassword2"></span>
+            </div>
+
+            <button type="submit" id="trigger-btn">Reset Password</button>
+
+            <div class="loginBox">
+                <p>Remember your password?</p>
+                <a href="../login/">Login</a>
+            </div>
+        </form>
+    </div>
+
+<script>
+document.querySelectorAll('.close-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+        this.parentElement.style.display = 'none';
+    });
+});
+
+const passwordInput = document.getElementById('passwordInput');
+const passwordInput2 = document.getElementById('passwordInput2');
+const togglePassword = document.getElementById('togglePassword');
+const togglePassword2 = document.getElementById('togglePassword2');
+
+const eyeOpen = `<i class='bx bx-show'></i>`;
+const eyeClosed = `<i class='bx bx-hide'></i>`;
+
+togglePassword.innerHTML = eyeClosed;
+togglePassword2.innerHTML = eyeClosed;
+
+togglePassword.addEventListener('click', () => {
+    const hidden = passwordInput.type === 'password';
+    passwordInput.type = hidden ? 'text' : 'password';
+    togglePassword.innerHTML = hidden ? eyeOpen : eyeClosed;
+});
+
+togglePassword2.addEventListener('click', () => {
+    const hidden = passwordInput2.type === 'password';
+    passwordInput2.type = hidden ? 'text' : 'password';
+    togglePassword2.innerHTML = hidden ? eyeOpen : eyeClosed;
+});
+</script>
+
+</body>
+</html>

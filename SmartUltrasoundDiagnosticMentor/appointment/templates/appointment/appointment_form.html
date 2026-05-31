@@ -1,0 +1,117 @@
+{% extends "navbar.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'appointment/appointment.css' %}">
+{% endblock %}
+
+{% block start2 %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert {{ message.tags }}">
+    <span class="close-btn" onclick="this.parentElement.style.display='none'">&times;</span>
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+    <h1>Book Doctor Appointment</h1>
+<p>Fill out the form below to book your appointment.</p>
+<div class="wrapper">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="box">
+
+            <div class="input-box">
+                <label>Patient Name</label>
+                <input type="text" value="{{ request.user.get_full_name|default:request.user.username }}" readonly>
+            </div>
+
+            <div class="input-box">
+                <label>Email</label>
+                <input type="text" value="{{ request.user.email }}" readonly>
+            </div>
+
+            <div class="input-box">
+                <label>Phone</label>
+                {{ form.phone }}
+            </div>
+
+            <div class="input-box">
+                <label>Select Doctor</label>
+                {% if doctor %}
+                <input type="text" value="Dr. {{ doctor.user.get_full_name }}" readonly
+                    style="background:var(--bg-surface2); color:gray;">
+                <div style="display: none;">{{ form.doctor }}</div>
+                {% else %}
+                {{ form.doctor }}
+                {% endif %}
+            </div>
+
+            <div class="input-box">
+                <label>Appointment Date</label>
+                {{ form.appointment_date }}
+            </div>
+
+            <div class="input-box">
+                <label>Appointment Time</label>
+                <select name="appointment_time" id="time-slots" class="input">
+                    <option value="">Select Time Slot</option>
+                </select>
+            </div>
+
+        </div>
+
+
+        <button id="trigger-btn" type="submit">
+            Book Appointment
+        </button>
+
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+    var dateInput = document.querySelector('input[type="date"]');
+    var timeSelect = document.getElementById('time-slots');
+
+    // ✅ Allow today
+    if (dateInput) {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        dateInput.min = yyyy + '-' + mm + '-' + dd;
+    }
+
+    // ⏰ Generate 30-min slots from 10:00 to 18:00
+    function generateTimeSlots() {
+        timeSelect.innerHTML = '<option value="">Select Time Slot</option>';
+
+        let start = 10 * 60; // 10:00 in minutes
+        let end = 17 * 60;   // 18:00 in minutes
+
+        for (let mins = start; mins <= end; mins += 30) {
+            let hours = Math.floor(mins / 60);
+            let minutes = mins % 60;
+
+            let timeValue =
+                String(hours).padStart(2, '0') + ':' +
+                String(minutes).padStart(2, '0');
+
+            let displayTime = new Date(0, 0, 0, hours, minutes)
+                .toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            let option = document.createElement("option");
+            option.value = timeValue;
+            option.textContent = displayTime;
+
+            timeSelect.appendChild(option);
+        }
+    }
+
+    generateTimeSlots();
+});
+</script>
+ {% include 'footer2.html' %}
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+
+
+
+<div class="appointment-container">
+
+    <h1 class="title">Ultrasound History</h1>
+
+    {% if history %}
+
+    <div class="table-wrapper">
+        <table>
+
+            <tr>
+                <th>Sr</th>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Ultrasound Image</th>
+                <th>Diagnostic Report</th>
+                <th>Save</th>
+            </tr>
+
+            {% for item in history %}
+            <tr>
+
+                <td>{{ item.user_scan_number  }}</td>
+
+                <td>
+                    {{ item.display_name }}
+                </td>
+
+                <td>{{ item.created_at }}</td>
+
+                <td>
+                    {% if item.image %}
+                    #{{ item.image.id }}
+                    {% else %}
+                    No Image
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item.report %}
+                    DX-{{ item.report.id|stringformat:"04d" }}
+                    {% else %}
+                    No Report
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="bm-btn{% if item.id in bookmarked_ids %} bookmarked{% endif %}"
+                        data-type="scan" data-id="{{ item.id }}"
+                        title="Bookmark this record">
+                        <i class="fas fa-bookmark"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
+    {% else %}
+    <p>No history available.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

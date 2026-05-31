@@ -1,0 +1,86 @@
+{% extends "navbar.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/profile_view.css' %}">
+{% endblock %}
+
+{% block start2 %}
+<div class="box3 profile-card" style="margin-bottom: 5vh;">
+    <form method="POST" enctype="multipart/form-data" class="profile-form" style="display: flex;justify-content: space-between;width: 100%;">
+    <div class="profile-avatar">
+        <div class="avatar-wrapper">
+            <!-- Profile Image OR Initials -->
+            {% if profile.profile_photo %}
+            <img src="{{ profile.profile_photo.url }}" class="avatar-img">
+            {% else %}
+            <div class="avatar-circle">
+                {{ request.user.first_name|slice:":1" }}{{ request.user.last_name|slice:":1" }}
+            </div>
+            {% endif %}
+
+            <!-- Hidden File Input -->
+            <input type="file" name="profile_photo" id="profilePhotoInput" hidden accept="image/*">
+
+            <!-- Plus Button -->
+            <div class="avatar-upload-btn" onclick="document.getElementById('profilePhotoInput').click()">
+                +
+            </div>
+        </div>
+        
+        <h2 class="profile-title">{{ request.user.get_full_name }}</h2>
+        <p><strong> Patient</strong></p>
+
+        </div>
+
+        <div class="profile-info">
+            {% csrf_token %}
+            
+            <div class="info-row">
+                <span class="label">Gender</span>
+                <select class="input-box" name="gender">
+                    <option value="male" {% if profile.gender == "male" %}selected{% endif %}>Male</option>
+                    <option value="female" {% if profile.gender == "female" %}selected{% endif %}>Female</option>
+                </select>
+            </div>
+
+            <div class="info-row">
+                <span class="label">Age</span>
+                <input class="input-box" type="number" name="age" value="{{ profile.age }}">
+            </div>
+
+            <div class="info-row">
+                <span class="label">Weight (kg)</span>
+                <input class="input-box" type="number" step="0.1" name="weight" value="{{ profile.weight }}">
+            </div>
+
+            <div class="info-row">
+                <span class="label">Height (cm)</span>
+                <input class="input-box" type="number" step="0.1" name="height" value="{{ profile.height }}">
+            </div>
+
+            <button class="trigger-btn" type="submit">Update</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById("profilePhotoInput").addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const avatar = document.querySelector(".avatar-img") || document.querySelector(".avatar-circle");
+
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.className = "avatar-img";
+
+                avatar.replaceWith(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+ {% include 'footer2.html' %}
+{% endblock %}

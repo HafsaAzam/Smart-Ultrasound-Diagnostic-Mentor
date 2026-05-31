@@ -1,0 +1,335 @@
+/* Healthy Lifestyle System Styling */
+:root {
+    /* ── Teal accent ── */
+    --accent: rgb(21, 67, 117);
+    --accent-dim: rgb(200, 215, 230);
+    --accent-dim2: #4db6ac;
+    --accent-hover: rgb(11 45 82);
+    --dim2-hover: #248279;
+    --accent-glow: rgba(80, 118, 159, 0.18);
+    --accent-border: rgba(80, 118, 159, 0.28);
+
+    /* ── light palette ── */
+    --bg-base: #fff;
+    --bg-surface: rgba(230, 241, 251, 0.322);
+    --bg-raised: #f8faff;
+    --bg-surface2: rgba(230, 241, 251);
+    --border: #e2e0d8;
+    --border-light: rgba(255, 255, 255, 0.05);
+
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --text-muted: #5a6478;
+    --text-btn: #fff;
+
+    --font-main: 'DM Sans', sans-serif;
+    --font-display: 'DM Serif Display', serif;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+
+    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.183);
+
+    --error: #C62828;
+    --warning: #F9A825;
+    --success: #2E7D32;
+
+    --pill-nutrition: #FF6B6B;
+    --pill-activity: #4ECDC4;
+    --pill-sleep: #45B7D1;
+    --pill-mental: #96CEB4;
+    --pill-safety: #FFEEAD;
+}
+
+.lifestyle-container {
+    animation: fadeIn 0.5s ease-out;
+    padding: 120px 100px;
+    display: flex;
+    flex-direction: column;
+}
+.lifestyle-container h1{
+    font-family: var(--font-display);
+    color: var(--accent);
+        font-size: 3rem;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* BMI Gauge Style */
+.bmi-section {
+    background: var(--bg-base);
+    padding: 30px;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.bmi-gauge {
+    width: 200px;
+    height: 100px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 100px 100px 0 0;
+    background: #eee;
+}
+
+.bmi-bar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(from 180deg at 50% 100%,
+            #3498db 0deg 45deg,
+            #2ecc71 45deg 90deg,
+            #f1c40f 90deg 135deg,
+            #e74c3c 135deg 180deg);
+    transform-origin: center bottom;
+}
+
+.bmi-pointer {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    height: 90px;
+    background: var(--text-primary);
+    transform-origin: bottom center;
+    transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 5;
+}
+
+.bmi-value-display {
+    text-align: center;
+}
+
+.bmi-value-display h1 {
+    font-size: 3rem;
+    margin: 0;
+    color: var(--accent);
+}
+
+.bmi-category-tag {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.cat-Underweight {
+    background: #d6eaf8;
+    color: #3498db;
+}
+
+.cat-Normal {
+    background: #d4efdf;
+    color: #2ecc71;
+}
+
+.cat-Overweight {
+    background: #fcf3cf;
+    color: #f1c40f;
+}
+
+.cat-Obese {
+    background: #fadbd8;
+    color: #e74c3c;
+}
+
+/* Recommendation Pillar Cards */
+.pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.pillar-card {
+    background: var(--bg-base);
+    padding: 25px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    border-left: 6px solid var(--accent);
+    position: relative;
+    overflow: hidden;
+}
+
+.pillar-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.pillar-card i {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    opacity: 0.8;
+}
+
+.pillar-nutrition {
+    border-left-color: var(--pill-nutrition);
+}
+
+.pillar-activity {
+    border-left-color: var(--pill-activity);
+}
+
+.pillar-sleep {
+    border-left-color: var(--pill-sleep);
+}
+
+.pillar-mental {
+    border-left-color: var(--pill-mental);
+}
+
+.pillar-card h3 {
+    margin-bottom: 15px;
+    color: var(--text-primary);
+}
+
+.pillar-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* Assessment Form */
+.assessment-form-container {
+    background: var(--bg-base);
+    padding: 40px;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    margin: 0 auto;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: flex;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-muted);
+    gap: 8px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid var(--accent-border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+    transition: 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.btn-lifestyle {
+    background: var(--accent);
+    color: white;
+    padding: 14px 28px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+    font-size: 1.1rem;
+}
+
+.btn-lifestyle:hover {
+    background: var(--accent-hover);
+    transform: scale(1.02);
+}
+
+/* Explainability Section */
+.reasoning-box {
+    background: var(--bg-surface);
+    padding: 20px;
+    border-radius: var(--radius-md);
+    margin-top: 40px;
+    border: 1px dashed var(--accent);
+}
+
+.reasoning-box h4 {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Safety Alert */
+.safety-alert {
+    background: #fff3cd;
+    color: #856404;
+    padding: 15px;
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+    border-left: 5px solid #ffc107;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Radio Button Styling */
+.assessment-form-container ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.assessment-form-container ul li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.form-check-input[type=radio] {
+    border-radius: 50%;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+.form-check-input {
+    gap: 30px;
+    display: flex;
+    --bs-form-check-bg: var(--bs-body-bg);
+    margin-top: .25em;
+    border: none;
+}

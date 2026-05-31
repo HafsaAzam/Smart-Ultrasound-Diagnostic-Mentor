@@ -1,0 +1,182 @@
+<div class="footer-bottom">
+    <p>&copy; 2026 Smart Ultrasound Diagnostic Mentor. All rights reserved.</p>
+    <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+    </div>
+</div>
+<style>
+    /* Footer Styling */
+    .footer {
+        background: var(--bg-surface);
+        padding: 60px 0 20px;
+        margin-top: 50px;
+        border-top: 1px solid var(--border);
+        color: var(--text-primary);
+        font-family: var(--font-main, 'Inter', sans-serif);
+    }
+
+    .footer-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+        gap: 40px;
+        margin-bottom: 40px;
+    }
+
+    .footer-brand .footer-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .footer-brand .footer-logo span {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--accent);
+    }
+
+    .footer-desc {
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 25px;
+        font-size: 0.95rem;
+    }
+
+    .footer-socials {
+        display: flex;
+        gap: 15px;
+    }
+
+    .footer-socials a {
+        width: 38px;
+        height: 38px;
+        background: var(--bg-raised);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+        border: 1px solid var(--border);
+    }
+
+    .footer-socials a:hover {
+        background: var(--accent);
+        color: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px var(--accent-glow);
+    }
+
+    .footer-links h3,
+    .footer-contact h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 25px;
+        color: var(--text-primary);
+        position: relative;
+    }
+
+    .footer-links h3::after,
+    .footer-contact h3::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -8px;
+        width: 30px;
+        height: 2px;
+        background: var(--accent);
+    }
+
+    .footer-links ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-links ul li {
+        margin-bottom: 12px;
+    }
+
+    .footer-links ul li a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: 0.2s;
+        font-size: 0.95rem;
+    }
+
+    .footer-links ul li a:hover {
+        color: var(--accent);
+        padding-left: 5px;
+    }
+
+    .footer-contact .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 18px;
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    .footer-contact .contact-item i {
+        color: var(--accent);
+        font-size: 1.1rem;
+    }
+
+    .footer-bottom {
+        width: 100%;
+        padding: 30px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .footer-bottom p {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+    .footer-bottom-links {
+        display: flex;
+        gap: 25px;
+    }
+
+    .footer-bottom-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: 0.2s;
+    }
+
+    .footer-bottom-links a:hover {
+        color: var(--accent);
+    }
+
+    body.dark-mode .footer {
+        background: #0b0e14;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .footer-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .footer-grid {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .footer-bottom {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>

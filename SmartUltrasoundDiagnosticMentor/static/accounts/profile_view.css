@@ -1,0 +1,460 @@
+:root {
+    /* ── Teal system ── */
+    --accent: rgb(21, 67, 117);
+    --accent-dim: rgb(200, 215, 230);
+    --accent-dim2: #4db6ac;
+    --accent-hover: rgb(11 45 82);
+    --dim2-hover: #248279;
+    --accent-glow: rgba(80, 118, 159, 0.18);
+
+    --bg-base: #fff;
+    --bg-surface: rgba(230, 241, 251, 0.322);
+    --bg-raised: #f8faff;
+    --bg-surface2: rgba(230, 241, 251);
+
+    --border: #e2e0d8;
+
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --text-btn: #fff;
+
+    --font-main: 'DM Sans', sans-serif;
+    --font-display: 'DM Serif Display', serif;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+
+    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.18);
+
+    --error: #C62828;
+    --warning: #F9A825;
+    --success: green;
+}
+
+/* ===== BODY ===== */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    font-family: var(--font-main);
+    color: var(--text-primary);
+
+    background:
+        radial-gradient(circle at top left, var(--bg-base) 50%, transparent 100%),
+        radial-gradient(circle at bottom -45% right 30%, var(--accent-dim2) 10%, transparent 40%),
+        radial-gradient(circle at top 90% right 0%, var(--accent-dim) 10%, transparent 30%);
+}
+
+/* ===== CARD ===== */
+.box,
+.box2,
+.box3 {
+    width: 70%;
+    background: var(--bg-base);
+    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-lg);
+    padding: 4vh 3vw;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid var(--border);
+}
+
+/* spacing */
+.box {
+    margin: 20vh 0 0;
+}
+
+.box2 {
+    margin: 20vh 0 7vh;
+}
+
+.box3 {
+    margin: 20vh 0 0;
+}
+
+/* ===== AVATAR ===== */
+
+/* Wrapper */
+.avatar-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+}
+
+/* Image */
+.avatar-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--bg-hover);
+}
+
+/* PLUS BUTTON */
+.avatar-upload-btn {
+    position: absolute;
+    bottom: 14px;
+    right: 0px;
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid white;
+    transition: 0.2s ease;
+}
+
+/* Hover effect */
+.avatar-upload-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* ============================================ */
+.profile-avatar {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+}
+
+.avatar-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dim2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--text-btn);
+    box-shadow: var(--shadow-sm);
+}
+
+/* ===== TEXT ===== */
+.profile-title {
+    margin-top: 20px;
+    font-family: var(--font-display);
+    color: var(--accent);
+}
+
+.profile-info {
+    width: 50%;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+}
+
+.label {
+    /* font-weight: 600; */
+    color: var(--text-secondary);
+}
+
+.value {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* ===== BUTTON ===== */
+.trigger-btn {
+    padding: 12px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    display: block;
+    width: 100%;
+    background: var(--accent);
+    color: var(--text-btn);
+    border: none;
+    margin-top: 30px;
+    text-decoration: none;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.trigger-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+/* ===== INPUTS ===== */
+.input-box {
+    height: 50px;
+    margin: 10px 0;
+    width: 80%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0 15px;
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    outline: none;
+}
+
+.input-box select:focus,
+.input-box select:hover,
+.input-box select:active,
+.input-box:hover,
+.input-box:active {
+    box-shadow: 0 0 10px 3px #cfe0f0;
+
+
+}
+
+.profile-card-row {
+    display: flex;
+    column-gap: 30px;
+}
+
+/* ============================= */
+/* RESPONSIVE DESIGN */
+
+/* ---------- Tablets (1024px and below) ---------- */
+@media (max-width: 1024px) {
+
+    .box,
+    .box2,
+    .box3 {
+        width: 85%;
+        padding: 4vh 4vw;
+    }
+
+    .profile-avatar {
+        width: 45%;
+    }
+
+    .profile-info {
+        width: 50%;
+    }
+}
+
+/* ---------- Small Tablets (768px and below) ---------- */
+@media (max-width: 768px) {
+
+    .box,
+    .box2,
+    .box3 {
+        width: 90%;
+        align-items: center;
+    }
+
+    .profile-avatar {
+        width: 40%;
+        margin-bottom: 30px;
+    }
+
+    .profile-info {
+        width: 60%;
+    }
+
+    .info-row {
+        align-items: center;
+        gap: 5px;
+    }
+
+    .input-box {
+        width: 80%;
+    }
+}
+
+@media (max-width: 600px) {
+    .box2 {
+        width: 80%;
+        flex-direction: column
+    }
+
+    .box2 .profile-avatar {
+        width: 90% !important;
+        margin-bottom: 0px;
+    }
+
+    .box3 form {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-info {
+        width: 90%;
+    }
+
+    .profile-card-row {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+/* ---------- Large Mobile (425px and below) ---------- */
+@media (max-width: 500px) {
+
+    .box,
+    .box2,
+    .box3 {
+        width: 95%;
+        padding: 3vh 5vw;
+        flex-direction: column;
+        margin-bottom: 8vh;
+    }
+
+    .avatar-wrapper {
+        width: 120px;
+        height: 120px;
+    }
+
+    .avatar-img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .avatar-circle {
+        width: 120px;
+        height: 120px;
+        font-size: 24px;
+    }
+
+    .profile-avatar {
+        width: 100%;
+    }
+
+    .profile-info {
+        width: 100%;
+        text-align: center;
+    }
+
+    .profile-title {
+        font-size: 22px;
+    }
+
+    .input-box {
+        width: 90%;
+    }
+
+    input[type="file"] {
+        width: 100%;
+    }
+
+    .info-row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .label {
+        font-size: 15px;
+        margin-bottom: 5px;
+    }
+
+    .value {
+        font-size: 15px;
+    }
+
+    .trigger-btn {
+        padding: 10px;
+        font-size: 15px;
+    }
+}
+
+/* ---------- Medium Mobile (375px and below) ---------- */
+@media (max-width: 375px) {
+
+    .box,
+    .box2,
+    .box3 {
+        width: 98%;
+    }
+
+    .avatar-wrapper {
+        width: 100px;
+        height: 100px;
+    }
+
+    .avatar-img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .avatar-circle {
+        width: 100px;
+        height: 100px;
+        font-size: 20px;
+    }
+
+    .profile-title {
+        font-size: 20px;
+    }
+
+    .input-box {
+        width: 100% !important;
+    }
+
+    input[type="file"] {
+        width: 100% !important;
+        margin: 10px 0;
+    }
+}
+
+/* ---------- Small Mobile (320px and below) ---------- */
+@media (max-width: 320px) {
+
+    .box,
+    .box2,
+    .box3 {
+        padding: 2vh 3vw;
+    }
+
+    .box2 {
+        width: 85%;
+    }
+
+    .avatar-wrapper {
+        width: 80px;
+        height: 80px;
+    }
+
+    .avatar-upload-btn {
+        position: absolute;
+        bottom: 10px;
+        right: -5px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .avatar-img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .avatar-circle {
+        width: 80px;
+        height: 80px;
+        font-size: 18px;
+    }
+
+    .profile-title {
+        font-size: 18px;
+    }
+
+    .label,
+    .value {
+        font-size: 14px;
+    }
+
+    .trigger-btn {
+        font-size: 14px;
+    }
+}

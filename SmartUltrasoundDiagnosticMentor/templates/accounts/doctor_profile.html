@@ -1,0 +1,126 @@
+{% extends "navbar.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/profile_view.css' %}">
+{% endblock %}
+
+{% block start2 %}
+<div class="box2 profile-card" style="column-gap: 30px;">
+        <!-- LEFT SIDE -->
+        <div class="profile-avatar" style="width: 50%;">
+
+            <div class="avatar-wrapper">
+
+                <!-- Profile Image OR Initials -->
+                {% if profile.profile_photo %}
+                    <img src="{{ profile.profile_photo.url }}" class="avatar-img">
+                {% else %}
+                    <div class="avatar-circle">
+                        {{ request.user.first_name|slice:":1" }}
+                        {{ request.user.last_name|slice:":1" }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <h2 class="profile-title">
+                {{ request.user.get_full_name }}
+            </h2>
+
+            <p><strong>Doctor</strong></p>
+
+            <!-- Basic Info -->
+            <div style="width: 100%; margin-top: 10px;">
+                <div class="info-row">
+                    <span class="label">Gender</span>
+                    <span class="value">{{ profile.gender }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">Age</span>
+                    <span class="value">{{ profile.age|default:"Not provided" }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">Weight</span>
+                    <span class="value">{{ profile.weight|default:"--" }} kg</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">Height</span>
+                    <span class="value">{{ profile.height|default:"--" }} cm</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="profile-info">
+
+            <div class="info-row">
+                <span class="label">Phone</span>
+                <span class="value">{{ profile.phone|default:"Not provided" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Email</span>
+                <span class="value">{{ request.user.email }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="label">Office Location</span>
+                <span class="value">{{ profile.office_location|default:"Not provided" }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="label">Degrees</span>
+                <span class="value">{{ profile.degrees|default:"Not provided" }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="label">Experience</span>
+                <span class="value">{{ profile.experience }} years</span>
+            </div>
+
+            <div class="info-row">
+                <span class="label">Status</span>
+                <span class="value">
+                    {% if profile.is_verified %}
+                        <span style="color: var(--success);">Verified</span>
+                    {% elif profile.is_rejected %}
+                        <span style="color: var(--error);">Rejected</span>
+                    {% else %}
+                        <span style="color: var(--warning);">Pending Approval</span>
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="info-row">
+                <span class="label">Availability</span>
+                <span class="value">
+                    {% if profile.is_available %}
+                        <span style="color: var(--success); font-weight: bold; background: rgba(0, 200, 83, 0.1); padding: 4px 8px; border-radius: 4px;">Available</span>
+                    {% else %}
+                        <span style="color: var(--error); font-weight: bold; background: rgba(213, 0, 0, 0.1); padding: 4px 8px; border-radius: 4px;">Unavailable</span>
+                    {% endif %}
+                </span>
+            </div>
+
+            <!-- Degree Document -->
+            {% if profile.degree_document %}
+            <div style="margin-top:20px;">
+                <span class="label">Degree Document:</span><br>
+                <img src="{{ profile.degree_document.url }}"
+                     style="margin-top:10px;max-width:180px;border-radius:8px;max-height: 150px;">
+            </div>
+            {% endif %}
+
+            <!-- Edit Button -->
+            <a class="trigger-btn" href="{% url 'edit_profile' %}" style="margin-top: 20px; display: inline-block;">
+                Edit Profile
+            </a>
+
+        </div>
+    </div>
+     {% include 'footer2.html' %}
+{% endblock %}

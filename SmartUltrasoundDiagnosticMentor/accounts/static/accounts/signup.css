@@ -1,0 +1,503 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "poppins", sans-serif;
+}
+
+:root {
+    --primary: #154375;
+    --secondary: #4db6ac;
+    --accent: #d2c8ee;
+    --background: #F4F6F8;
+    --card: #FFFFFF;
+    --text: #263238;
+    --error: #C62828;
+    --warning: #F9A825;
+    --success: #2E7D32;
+}
+
+body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary);
+    position: sticky;
+    padding: 40px 0;
+    height: 100vh;
+    font-family: var(--font-main);
+    /* Multiple backgrounds: image on top, gradients below */
+    background:
+        radial-gradient(circle at top left, var(--background) 50%, transparent 100%),
+        radial-gradient(circle at bottom -45% right 30%, var(--secondary) 10%, transparent 40%),
+        radial-gradient(circle at top 90% right 0%, var(--accent) 10%, transparent 30%);
+}
+
+.alert {
+    position: relative;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: small;
+    transform: translateY(-30px);
+    opacity: 0;
+    animation: slideDown 0.4s ease forwards;
+}
+
+/* success msg */
+.alert.success {
+    background: var(--success);
+
+}
+
+/* success error */
+.alert.error {
+    background: var(--error);
+}
+
+@keyframes slideDown {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.close-btn {
+    position: absolute;
+    top: 0px;
+    right: 6px;
+    font-size: 18px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+}
+
+/* .close-btn:hover {
+} */
+
+.wrapper,
+.wrapper2 {
+    background-color: var(--card);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    justify-content: center;
+    align-items: flex-start;
+    height: max-content;
+    padding: 10vh 30px;
+}
+
+.wrapper {
+    width: 70%;
+    display: flex;
+}
+
+.wrapper2 {
+    width: 35%;
+    display: flex;
+
+}
+
+.wrapper2 form {
+    width: 100%;
+}
+
+.logo {
+    width: 150px;
+}
+
+.wrapper h1 {
+    margin-bottom: 20px;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    width: fit-content;
+}
+
+.leftbox {
+    display: flex;
+    flex-direction: column;
+    /* width: 30%; */
+    margin: -20px 0 0 10px;
+}
+
+.cont {
+    font-size: 15;
+    font-weight: 100;
+}
+
+form {
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.box2 .input-box {
+    width: 95%;
+}
+
+.input-box {
+    position: relative;
+    width: 32%;
+    height: 50px;
+    margin: 18px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 0px 45px 0px 20px;
+    color: var(--primary);
+}
+
+
+.role-select,
+.input-box select {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 0px 45px 0px 20px;
+    color: var(--primary);
+    padding-right: 40px;
+
+    /* remove default arrow */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    /* custom arrow */
+    background-image: url("data:image/svg+xml;utf8,<svg fill='var(--primary)' height='20' viewBox='0 0 16 16' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M3.204 5h9.592L8 10.481z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    /* controls arrow position */
+    background-size: 14px;
+}
+
+
+/* Dropdown options */
+.role-select option,
+.input-box select option {
+    background-color: white;
+    color: var(--primary);
+}
+
+.role-select option:focus,
+.role-select option:hover,
+.input-box select option:focus,
+.input-box select option:hover,
+.role-select option:active,
+.input-box select option:active {
+    color: white;
+    background-color: var(--accent) !important;
+}
+
+input::placeholder {
+    color: #8a8a8d;
+}
+.custom-file-input{
+    position:relative;
+    border:1px solid #ccc;
+    padding:12px;
+    border-radius:5px;
+    width:300px;
+    color:#777;
+}
+
+.custom-file-input input{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    cursor:pointer;
+}
+input:focus,
+.file-label:hover {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 5px var(--primary);
+}
+
+.input-box input:hover,
+.input-box input:active {
+    box-shadow: 0 0 10px #284b71c7;
+
+}
+
+
+.input-box i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+}
+
+.toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 20px;
+    height: auto;
+}
+
+.file-box {
+    display: flex;
+    align-items: center;
+}
+
+.file-label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 0px 45px 0px 20px;
+    /* color: white; */
+}
+
+.file-label input[type="file"] {
+    display: none;
+}
+
+.popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.popup-card {
+    background-color: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup-card p {
+    margin: 0 0 15px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.popup-card button {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: white;
+    background-color: var(--primary);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.popup-card button:hover {
+    background-color: var(--secondary);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#trigger-btn {
+    padding: 25px 0;
+    height: 7.5vh;
+    border-radius: 8px;
+    font-size: 1.17rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: var(--primary);
+    color: white;
+    cursor: pointer;
+    border: none;
+    margin-top: 20px;
+}
+
+#trigger-btn:hover {
+    background-color: var(--secondary);
+    cursor: pointer;
+    transition: ease 0.3s;
+    border: none;
+    color: var(--color1);
+    transform: translateY(-2px);
+    color: var(--card);
+
+}
+
+.loginBox {
+    display: flex;
+    margin-top: 1.5rem;
+    justify-content: center;
+}
+
+.loginBox a {
+    color: var(--color1);
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.loginBox a:hover {
+    font-style: italic;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.box {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.box2 {
+    display: grid;
+    width: 100%;
+    justify-content: space-between;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Media Queries for Responsiveness */
+/* ---------- Large Laptops (1240px and below) ---------- */
+@media (max-width: 1240px) {
+    .wrapper2 {
+        padding: 6vh 30px;
+    }
+}
+
+/* ---------- Tablets (1024px and below) ---------- */
+@media (max-width: 1024px) {
+    .wrapper {
+        width: 80%;
+    }
+    .wrapper2 {
+        width: 45%;
+    }
+    .box2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ---------- Small Tablets (768px and below) ---------- */
+@media (max-width: 768px) {
+    .wrapper2 {
+        width: 60%;
+    }
+    .wrapper {
+        width: 90%;
+    }
+    .box2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .box2 .input-box {
+        margin: 10px 0 0;
+    }
+}
+
+/* ---------- Large Mobile (425px and below) ---------- */
+@media (max-width: 425px) {
+    .wrapper,
+    .wrapper2 {
+        width: 80%;
+    }
+    .wrapper h1,
+    .wrapper2 h1 {
+        font-size: 30px;
+    }
+    .box2 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .box label,
+    .box a {
+        font-size: smaller;
+    }
+    .input-box input,
+    .file-label {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+    .input-box i {
+        font-size: 16px;
+    }
+    #trigger-btn {
+        height: 40px;
+    }
+}
+
+/* ---------- Medium Mobile (375px and below) ---------- */
+@media (max-width: 375px) {
+    .wrapper,
+    .wrapper2 {
+        padding-inline: 20px;
+    }
+    .wrapper h1,
+    .wrapper2 h1 {
+        margin-bottom: 20px;
+    }
+    .loginBox {
+        font-size: 13px;
+    }
+    .wrapper .input-box,
+    .wrapper2 .input-box {
+        margin: 5px 0;
+    }
+    .input-box input,
+    .input-box select,
+    .file-label {
+        font-size: 14px;
+        padding: 8px 10px;
+        height: 80%;
+    }
+    .input-box i {
+        top: 43%;
+    }
+    #trigger-btn {
+        padding: 8px 10px;
+    }
+}
+
+/* ---------- Small Mobile (320px and below) ---------- */
+@media (max-width: 320px) {
+    .wrapper,
+    .wrapper2 {
+        width: 85%;
+        padding: 30px 20px;
+    }
+}

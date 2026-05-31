@@ -1,0 +1,231 @@
+{% extends "navbar.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'home/style.css' %}">
+<link rel="stylesheet" href="{% static 'darktheme.css' %}">
+
+<style>
+    body {
+        height: fit-content;
+        background: var(--bg-base);
+        font-family: var(--font-main);
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .form-header h1 {
+        font-family: var(--font-display);
+        color: var(--accent);
+        line-height: 1.2;
+        font-weight: bold;
+
+    }
+
+    .form-header p {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+    }
+
+    .section1 {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        background: var(--bg-base);
+        font-family: var(--font-main);
+        height: 100%;
+        padding: 20vh 0 40px;
+    }
+
+    .disease {
+        background: var(--bg-surface);
+        box-shadow: var(--shadow-md);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+    }
+
+    #upload-text {
+        color: var(--text-secondary);
+    }
+
+    .diseaseInputs {
+        margin-top: 1.5rem;
+    }
+
+    .input-box select,
+    .input-box input {
+        width: 100%;
+        padding: 10px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        background: var(--bg-surface2);
+        color: var(--text-primary);
+        transition: 0.3s;
+        outline: none;
+    }
+
+    .input-box select:hover,
+    .input-box input:hover {
+        box-shadow: 0 0 10px 3px #cfe0f0;
+    }
+
+    .input-box select {
+        cursor: pointer;
+    }
+
+    #trigger-btn {
+        width: 100%;
+        margin-top: 1rem;
+        padding: 12px;
+        border-radius: var(--radius-md);
+        border: none;
+        background: var(--accent);
+        color: var(--text-btn);
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+    #trigger-btn:hover {
+        background: var(--accent-hover);
+        box-shadow: var(--shadow-md);
+    }
+
+    .preview-img {
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+    }
+    .disease svg{
+        width: 48px;
+        height: 48px;
+    }
+    @media (max-width: 768px) {
+        .disease {
+            width: 80%;
+        }
+    }
+    @media (max-width: 500px) {
+        .disease svg{
+        width: 30px;
+        height: 30px;
+    }
+    }
+</style>
+
+{% endblock %}
+
+{% block start2 %}
+<div class="section1">
+    <div class="form-header">
+        <h1>Get AI Diagnosis</h1>
+        <p>Upload an ultrasound scan to receive an instant, AI-powered diagnostic report.</p>
+    </div>
+    <div class="disease">
+
+        <div class="image d-flex align-items-center justify-content-center">
+            <button type="button" id="upload-btn" data-login-url="{% url 'login' %}">
+                <svg class="mx-auto size-12 text-foreground/90" viewBox="0 0 1024 1024"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M520.4 884.9H214c-49.6 0-90-40.4-90-90v-580c0-49.6 40.4-90 90-90h580c49.6 0 90 40.4 90 90v303.3c0 16.6-13.4 30-30 30s-30-13.4-30-30V214.9c0-16.5-13.5-30-30-30H214c-16.5 0-30 13.5-30 30v580c0 16.5 13.5 30 30 30h306.4c16.6 0 30 13.4 30 30s-13.4 30-30 30z m325.8-122.8H615.6c-16.6 0-30-13.4-30-30s13.4-30 30-30h230.7c16.6 0 30 13.4 30 30s-13.5 30-30.1 30zM730.9 877.4c-16.6 0-30-13.4-30-30V616.8c0-16.6 13.4-30 30-30s30 13.4 30 30v230.7c0 16.5-13.4 29.9-30 29.9zM327.8 429.1c-45 0-81.7-36.6-81.7-81.7 0-45 36.6-81.7 81.7-81.7s81.7 36.6 81.7 81.7c0 45-36.7 81.7-81.7 81.7z m0-117.4c-19.7 0-35.7 16-35.7 35.7s16 35.7 35.7 35.7 35.7-16 35.7-35.7-16-35.7-35.7-35.7zM157 678.2c-8.9 0-17.7-3.9-23.6-11.5-10.2-13-8-31.9 5.1-42.1l162.6-127.7c13-10.2 31.9-8 42.1 5.1 10.2 13 8 31.9-5.1 42.1L175.5 671.8c-5.5 4.3-12 6.4-18.5 6.4z m329.5-13.5c-6.2 0-12.5-1.9-17.9-5.9L308.3 539.5c-13.3-9.9-16-28.7-6.2-42s28.7-16 42-6.2l160.3 119.3c13.3 9.9 16 28.7 6.2 42-5.9 7.9-14.9 12.1-24.1 12.1z m0 0c-8.6 0-17.2-3.7-23.1-10.9-10.6-12.8-8.8-31.7 4-42.2l367.5-304c12.8-10.6 31.7-8.8 42.2 4 10.6 12.8 8.8 31.7-4 42.2l-367.5 304c-5.5 4.7-12.3 6.9-19.1 6.9z"
+                        p-id="8092"></path>
+                </svg>
+
+                <span id="upload-text" class="block text-sm font-semibold">
+                    Click to upload the Ultrasound image
+                </span>
+            </button>
+
+            <form method="POST" action="{% url 'upload_image' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" id="file-input" name="image" accept="image/*" style="display:none" required>
+        </div>
+
+        <div class="diseaseInputs">
+
+            <div class="input-box" style="margin-bottom: 20px;">
+                <input type="text" placeholder="Name" name="name" value="{{ name|default:'' }}" required {% if not user.is_authenticated %} onclick="redirectToLogin()" {% endif %}>
+            </div>
+
+            <div class="input-box" style="margin-bottom: 20px;">
+                <select name="patient_gender" required {% if not user.is_authenticated %} onclick="redirectToLogin()" {% endif %}>
+                    <option value="" disabled {% if not profile %}selected{% endif %}>Select Gender</option>
+                    <option value="male" {% if profile and profile.gender == "male" %}selected{% endif %}>Male</option>
+                    <option value="female" {% if profile and profile.gender == "female" %}selected{% endif %}>Female
+                    </option>
+                </select>
+            </div>
+
+            <div class="input-box" style="margin-bottom: 20px;">
+                <input type="number" placeholder="Age" name="age" value="{% if profile %}{{ profile.age }}{% endif %}"
+                    required {% if not user.is_authenticated %} onclick="redirectToLogin()" {% endif %}>
+            </div>
+
+            <div class="input-box" style="margin-bottom: 20px;">
+                <input type="number" name="weight" placeholder="Weight (kg)" step="0.1" min="1"
+                    value="{% if profile %}{{ profile.weight }}{% endif %}" required {% if not user.is_authenticated %}
+                    onclick="redirectToLogin()" {% endif %}>
+            </div>
+
+            <button id="trigger-btn" type="submit" {% if not user.is_authenticated %}
+                onclick="redirectToLogin(); return false;" {% endif %}>
+                Get Diagnostic Report
+            </button>
+
+        </div>
+        </form>
+
+    </div>
+</div>
+{% include 'footer2.html' %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const uploadBtn = document.getElementById('upload-btn');
+        const fileInput = document.getElementById('file-input');
+        const uploadText = document.getElementById('upload-text');
+
+        const isLoggedIn = "{{ user.is_authenticated|yesno:'true,false' }}" === "true";
+
+        uploadBtn.addEventListener('click', () => {
+            if (!isLoggedIn) {
+                window.location.href = "{% url 'login' %}?next={{ request.path }}";
+                return;
+            }
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                let previewImg = uploadBtn.querySelector('.preview-img');
+
+                if (!previewImg) {
+                    previewImg = document.createElement('img');
+                    previewImg.className = 'preview-img mx-auto w-24 h-24 object-cover';
+                    previewImg.style.height = "90%";
+                    uploadBtn.appendChild(previewImg);
+                }
+
+                previewImg.src = e.target.result;
+
+                if (uploadText) uploadText.style.display = 'none';
+                const svg = uploadBtn.querySelector('svg');
+                if (svg) svg.style.display = 'none';
+            };
+
+            reader.readAsDataURL(file);
+        });
+    });
+</script>
+{% endblock %}

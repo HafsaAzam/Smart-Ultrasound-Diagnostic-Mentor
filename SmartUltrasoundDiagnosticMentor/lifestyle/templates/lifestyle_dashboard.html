@@ -1,0 +1,125 @@
+{% extends "navbar.html" %}
+{% load static %}
+{% block start2 %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'lifestyle/lifestyle.css' %}">
+{% endblock %}
+<div class="lifestyle-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <div>
+            <h1>Healthy Lifestyle Recommendations</h1>
+            <p class="text-secondary">AI-tailored insights based on your unique health profile.</p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <a href="{% url 'life_assessment' %}" class="btn-lifestyle"
+                style="width: auto; padding: 10px 20px; text-decoration: none;">
+                <i class="fas fa-edit"></i> Update Health Assessment
+            </a>
+        </div>
+    </div>
+
+    {% if r.safety_alerts %}
+    <div class="safety-alert">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div>
+            <strong>Safety Warning:</strong> {{ r.safety_alerts|linebreaksbr }}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- BMI & Highlights Section -->
+    <div class="bmi-section">
+        <div class="top">
+            <div class="bmi-gauge-container" style="text-align: center;">
+                <div class="bmi-gauge">
+                    <div class="bmi-bar"></div>
+                    <!-- <div class="bmi-pointer" style="transform: rotate({{ bmi_rotation|default:0 }}deg)"></div> -->
+                    <div class="bmi-pointer" data-rotation="{{ bmi_rotation|default:0 }}">
+                    </div>
+                </div>
+                <div
+                    style="width:200px;display: flex; justify-content: space-between; margin-top: 5px; font-size: 10px; color: var(--text-secondary);">
+                    <span>12</span>
+                    <span>25</span>
+                    <span>40+</span>
+                </div>
+            </div>
+
+            <div class="bmi-value-display">
+                <span class="text-secondary">Your Current BMI</span>
+                <h1>{{ r.bmi|default:"--" }}</h1>
+                <div class="bmi-category-tag cat-{{ r.bmi_category }}">
+                    {{ r.bmi_category }}
+                </div>
+            </div>
+        </div>
+        <div style="flex: 1; border-left: 1px solid var(--accent-border); padding-left: 30px;">
+            <h4 style="color: var(--accent); margin-bottom: 10px;">Body Mass Index (BMI)</h4>
+            <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);">
+                BMI is a standard screening tool used by healthcare providers to measure body fat based on your height
+                and weight.
+                Staying in the <strong>Normal</strong> range reduces the risk of long-term health issues.
+            </p>
+        </div>
+    </div>
+
+    <!-- Recommendation Pillars -->
+    <div class="pillar-grid">
+        <!-- Nutrition -->
+        <div class="pillar-card pillar-nutrition">
+            <div class="pillar-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                <i class="fas fa-utensils" style="color: var(--pill-nutrition); font-size: 1.5rem;"></i>
+                <h3 style="margin: 0;">Nutrition Advice</h3>
+            </div>
+            <p style="line-height: 1.6;">{{ r.nutrition_advice }}</p>
+        </div>
+
+        <!-- Activity -->
+        <div class="pillar-card pillar-activity">
+            <div class="pillar-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                <i class="fas fa-running" style="color: var(--pill-activity); font-size: 1.5rem;"></i>
+                <h3 style="margin: 0;">Activity Plan</h3>
+            </div>
+            <p style="line-height: 1.6;">{{ r.activity_advice }}</p>
+        </div>
+
+        <!-- Sleep -->
+        <div class="pillar-card pillar-sleep">
+            <div class="pillar-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                <i class="fas fa-bed" style="color: var(--pill-sleep); font-size: 1.5rem;"></i>
+                <h3 style="margin: 0;">Sleep Hygiene</h3>
+            </div>
+            <p style="line-height: 1.6;">{{ r.sleep_advice }}</p>
+        </div>
+
+        <!-- Mental Health -->
+        <div class="pillar-card pillar-mental">
+            <div class="pillar-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                <i class="fas fa-spa" style="color: var(--pill-mental); font-size: 1.5rem;"></i>
+                <h3 style="margin: 0;">Mindset & Wellness</h3>
+            </div>
+            <p style="line-height: 1.6;">{{ r.mental_health_advice }}</p>
+        </div>
+    </div>
+
+    <div class="reasoning-box">
+        <h4><i class="fas fa-info-circle" style="color: var(--accent);"></i> AI Reasoning</h4>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+            {{ r.reasoning }}
+        </p>
+    </div>
+</div>
+<script>
+    document.querySelectorAll('.bmi-pointer').forEach(el => {
+        el.style.setProperty('--rotation', el.dataset.rotation + 'deg');
+    });
+</script>
+
+<style>
+    .bmi-pointer {
+        transform: rotate(var(--rotation, 0deg));
+    }
+</style>
+{% include 'footer2.html' %}
+{% endblock %}

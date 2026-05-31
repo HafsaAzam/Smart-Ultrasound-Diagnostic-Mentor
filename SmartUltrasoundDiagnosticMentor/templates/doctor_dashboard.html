@@ -1,0 +1,111 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+<h1>My Dashboard</h1>
+<h2 class="first-h2">Doctor</h2>
+
+<div class="cards">
+    <div id="card">
+        <div class="card-info">
+            <h2>{{ total_appointments }}</h2>
+            <h3>Total Appointments</h3>
+        </div>
+        <div class="card-icon bg-blue">
+            <i class="fas fa-user-md"></i>
+        </div>
+    </div>
+
+    <div id="card">
+        <div class="card-info">
+            <h2>{{ pending }}</h2>
+            <h3>Pending Requests</h3>
+        </div>
+        <div class="card-icon bg-orange">
+            <i class="fas fa-clock"></i>
+        </div>
+    </div>
+
+    <div id="card">
+        <div class="card-info">
+            <h2>{{ accepted }}</h2>
+            <h3>Accepted</h3>
+        </div>
+        <div class="card-icon bg-green">
+            <i class="fas fa-check-circle"></i>
+        </div>
+    </div>
+
+    <div id="card">
+        <div class="card-info">
+            <h2>{{ rejected }}</h2>
+            <h3>Rejected</h3>
+        </div>
+        <div class="card-icon bg-red">
+            <i class="fas fa-times-circle"></i>
+        </div>
+    </div>
+
+    <div id="card">
+        <div class="card-info">
+            <h2>{{ scan_count }}</h2>
+            <h3>Ultrasound Scans</h3>
+        </div>
+        <div class="card-icon bg-cyan">
+            <i class="fas fa-microscope"></i>
+        </div>
+    </div>
+
+
+    <div id="card">
+        <div class="card-info">
+            <h2>{{ reports_count }}</h2>
+            <h3>Reports</h3>
+        </div>
+        <div class="card-icon bg-purple">
+            <i class="fas fa-file-medical-alt"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Bookmarked Records Section -->
+<div class="bookmarks-section" style="margin-top: 50px;">
+    <h2 style="margin-bottom: 20px;">Saved Records</h2>
+    {% if bookmarks %}
+        <div class="bookmarks-list">
+            {% for bm in bookmarks %}
+                <div class="bookmark-item">
+                    <div class="bookmark-item-info">
+                        <span class="bookmark-item-type">{{ bm.record_type }}</span>
+                        <span class="bookmark-item-label">{{ bm.label }}</span>
+                    </div>
+                    <a href="{% if bm.record_type == 'appointment' %}{% url 'view_appointment' %}{% elif bm.record_type == 'report' %}{% url 'view_reports' %}{% elif bm.record_type == 'image' %}{% url 'view_ultrasound_images' %}{% elif bm.record_type == 'scan' %}{% url 'view_scan_history' %}{% endif %}" class="bookmark-item-action">
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="color: var(--text-secondary);">No records bookmarked yet.</p>
+    {% endif %}
+
+    <h2 style="margin-top: 40px; margin-bottom: 20px;">Saved Doctors</h2>
+    {% if doctor_bookmarks %}
+        <div class="bookmarks-list">
+            {% for bm in doctor_bookmarks %}
+                <div class="bookmark-item">
+                    <div class="bookmark-item-info">
+                        <span class="bookmark-item-type">Doctor</span>
+                        <span class="bookmark-item-label">Dr. {{ bm.doctor.user.get_full_name }} — {{ bm.doctor.degrees }}</span>
+                    </div>
+                    <a href="{% url 'doctor_profile' bm.doctor.id %}" class="bookmark-item-action">
+                        <i class="fas fa-user-md"></i>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="color: var(--text-secondary);">No doctors bookmarked yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

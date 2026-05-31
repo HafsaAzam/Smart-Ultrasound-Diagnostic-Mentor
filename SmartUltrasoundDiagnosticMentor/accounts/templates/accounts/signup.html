@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up</title>
+    <link rel="stylesheet" href="{% static 'accounts/signup.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+
+<body>
+    <style>
+        @media (max-width: 1241px) {
+            body {
+                height: fit-content;
+            }
+        }
+
+        @media (max-width: 426px) {
+            form {
+                width: 90%;
+            }
+
+            .box2 .input-box {
+                width: 100%;
+            }
+        }
+    </style>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert {{ message.tags }}">
+        <span class="close-btn">&times;</span>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    <div class="wrapper">
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h1>Signup</h1>
+            <div class="box2">
+                <div class="input-box">
+                    <input type="text" placeholder="First Name *" name="f_name"
+                        value="{{ form_data.f_name|default:'' }}" required>
+                    <i class='bx bx-user'></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="text" placeholder="Last Name *" name="l_name" value="{{ form_data.l_name|default:'' }}"
+                        required>
+                    <i class='bx bx-user'></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="email" placeholder="Email *" name="email" value="{{ form_data.email|default:'' }}"
+                        required>
+                    <i class='bx bx-envelope'></i>
+                </div>
+                <div class="input-box">
+                    <input id="passwordInput" type="password" placeholder="Password *" name="password" required>
+                    <span class="toggle-icon" id="togglePassword">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#154375"
+                            class="bi bi-eye-slash-fill" viewBox="0 0 16 16" alt="Toggle visibility" id="eyeIcon">
+                            <path
+                                d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z" />
+                            <path
+                                d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z" />
+                        </svg>
+                    </span>
+                </div>
+
+                <div class="input-box">
+                    <input id="passwordInput2" type="password" placeholder="Confirm Password *" name="pass2" required>
+                    <span class="toggle-icon" id="togglePassword2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#154375"
+                            class="bi bi-eye-slash-fill" viewBox="0 0 16 16" alt="Toggle visibility" id="eyeIcon">
+                            <path
+                                d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z" />
+                            <path
+                                d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z" />
+                        </svg>
+                    </span>
+                </div>
+
+                <div class="input-box">
+                    <select class="form-select role-select" name="role" id="roleSelect" required>
+                        <option value="" disabled {% if not form_data.role %}selected{% endif %}>Select Role *</option>
+                        <option value="doctor" {% if form_data.role == 'doctor' %}selected{% endif %}>Doctor</option>
+                        <option value="patient" {% if form_data.role == 'patient' %}selected{% endif %}>Patient</option>
+                    </select>
+                </div>
+            </div>
+            <!-- <div class="box"> -->
+            <div id="doctorFields" style="display: {% if form_data.role == 'doctor' %}grid{% else %}none{% endif %};"
+                class="box2">
+                <div class="input-box">
+                    <select name="doctor_gender" required>
+                        <option value="" disabled {% if not form_data.doctor_gender %}selected{% endif %}>Select Gender
+                            *</option>
+                        <option value="male" {% if form_data.doctor_gender == 'male' %}selected{% endif %}>Male</option>
+                        <option value="female" {% if form_data.doctor_gender == 'female' %}selected{% endif %}>Female</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <input type="number" placeholder="Experience (Years) *" name="prof_years"
+                        value="{{ form_data.prof_years|default:'' }}" required>
+                </div>
+
+                <div class="input-box">
+                    <input type="number" placeholder="Age *" name="doctor_age"
+                        value="{{ form_data.doctor_age|default:'' }}" required>
+                </div>
+
+                <div class="input-box">
+                    <input type="text" placeholder="Degrees (e.g. MBBS, MD) *" name="doctor_degrees"
+                        value="{{ form_data.doctor_degrees|default:'' }}" required>
+                </div>
+
+                <div class="input-box custom-file-input">
+                    <span id="file-name">Upload Degree Document *</span>
+
+                    <input type="file" name="degree_document" accept="image/*,.pdf" required
+                        onchange="document.getElementById('file-name').innerText=this.files[0]?.name || 'Upload Degree Document *'">
+                </div>
+
+                <div class="input-box">
+                    <input type="number" step="0.1" placeholder="Weight (kg)" name="doctor_weight"
+                        value="{{ form_data.doctor_weight|default:'' }}">
+                </div>
+            </div>
+
+            <!-- Patient extra fields -->
+            <div id="patientFields" style="display: {% if form_data.role == 'patient' %}grid{% else %}none{% endif %};"
+                class="box2">
+                <div class="input-box">
+                    <select name="patient_gender" required>
+                        <option value="" disabled {% if not form_data.patient_gender %}selected{% endif %}>Select Gender
+                            *</option>
+                        <option value="male" {% if form_data.patient_gender == 'male' %}selected{% endif %}>Male</option>
+                        <option value="female" {% if form_data.patient_gender == 'female' %}selected{% endif %}>Female</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <input type="number" placeholder="Age *" name="age" value="{{ form_data.age|default:'' }}" required>
+                </div>
+
+                <div class="input-box">
+                    <input type="number" name="weight" placeholder="Weight (kg)" step="0.1" min="1"
+                        value="{{ form_data.weight|default:'' }}">
+                </div>
+            </div>
+
+            <div class="popup-container" id="popup">
+                <div class="popup-card">
+                    <p>Account added successfully!</p>
+                    <button id="close-btn">OK</button>
+                </div>
+            </div>
+
+            <button id="trigger-btn">Add Account</button>
+            <div class="loginBox">
+                <p>Already have an account?</p>
+                <a href="/accounts/login/" class="login-text">Login</a>
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>
+<script>
+    document.querySelectorAll('.close-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            this.parentElement.style.display = 'none';
+        });
+    });
+
+    roleSelect.addEventListener("change", function () {
+        const role = this.value;
+
+        // Get inputs
+        const doctorInputs = doctorFields.querySelectorAll("input, select");
+        const patientInputs = patientFields.querySelectorAll("input, select");
+
+        if (role === "doctor") {
+            doctorFields.style.display = "grid";
+            doctorFields.style.width = "100%";
+            doctorFields.style.justifyContent = "space-between";
+            patientFields.style.display = "none";
+
+            // Make doctor fields required based on condition
+            doctorInputs.forEach(input => {
+                if (input.name === 'prof_years' || input.name === 'degree_document') {
+                    input.required = true;
+                }
+            });
+
+            // Remove required from patient fields
+            patientInputs.forEach(input => input.required = false);
+        }
+        else if (role === "patient") {
+            doctorFields.style.display = "none";
+            patientFields.style.display = "grid";
+            patientFields.style.width = "100%";
+            patientFields.style.justifyContent = "space-between";
+
+            // Patient fields requirements
+            patientInputs.forEach(input => {
+                if (input.name === 'patient_gender' || input.name === 'age') {
+                    input.required = true;
+                } else {
+                    input.required = false;
+                }
+            });
+
+            // Remove required from doctor fields
+            doctorInputs.forEach(input => input.required = false);
+        }
+    });
+
+    function showFileName(input) {
+        const fileNameSpan = document.getElementById('file-name');
+        if (input.files && input.files.length > 0) {
+            fileNameSpan.textContent = input.files[0].name; // show the uploaded file name
+        } else {
+            fileNameSpan.textContent = "Upload Profile Image"; // fallback text
+        }
+    }
+
+    const passwordInput = document.getElementById('passwordInput');
+    const passwordInput2 = document.getElementById('passwordInput2');
+    const togglePassword = document.getElementById('togglePassword');
+    const togglePassword2 = document.getElementById('togglePassword2');
+
+
+    const eyeOpenSVG = `
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#154375" class="bi bi-eye-fill" viewBox="0 0 16 16" id="eyeIcon">
+  <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+  <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+</svg>`;
+
+    const eyeClosedSVG = `
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#154375" class="bi bi-eye-slash-fill" viewBox="0 0 16 16" id="eyeIcon">
+  <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+  <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+</svg>`;
+
+    togglePassword.addEventListener('click', () => {
+        const isPasswordHidden = passwordInput.type === 'password';
+        passwordInput.type = isPasswordHidden ? 'text' : 'password';
+        togglePassword.innerHTML = isPasswordHidden ? eyeOpenSVG : eyeClosedSVG;
+    });
+
+    togglePassword2.addEventListener('click', () => {
+        const isPasswordHidden = passwordInput2.type === 'password';
+        passwordInput2.type = isPasswordHidden ? 'text' : 'password';
+        togglePassword2.innerHTML = isPasswordHidden ? eyeOpenSVG : eyeClosedSVG;
+    });
+</script>

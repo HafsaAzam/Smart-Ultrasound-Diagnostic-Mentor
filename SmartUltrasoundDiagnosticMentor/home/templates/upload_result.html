@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tz %}
+
+{% block start %}
+<style>
+    :root {
+        --accent: rgb(21, 67, 117);
+        --accent-dim: rgb(200, 215, 230);
+        --accent-dim2: #4db6ac;
+        --accent-hover: rgb(11 45 82);
+        --dim2-hover: #248279;
+        --accent-glow: rgba(80, 118, 159, 0.18);
+        --accent-border: rgba(80, 118, 159, 0.28);
+        --bg-base: #fff;
+        --bg-surface: rgba(230, 241, 251, 0.322);
+        --bg-raised: #e8ebf142;
+        --bg-surface2: rgba(230, 241, 251);
+        --border: #e2e0d8;
+        --border-light: rgba(255, 255, 255, 0.05);
+
+        --text-primary: #0f172a;
+        --text-secondary: #64748b;
+        --text-muted: #5a6478;
+        --text-btn: #fff;
+
+        --font-main: 'DM Sans', sans-serif;
+        --font-display: 'DM Serif Display', serif;
+
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 18px;
+        --radius-xl: 24px;
+
+        --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.35);
+        --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.183);
+    }
+
+    body {
+        background-color: var(--bg-base);
+        color: var(--text-primary);
+        font-family: var(--font-main);
+    }
+
+    .report-card {
+        background-color: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        max-width: 900px;
+        margin: auto;
+        box-shadow: var(--shadow-md);
+    }
+
+    .report-header {
+        background-color: var(--accent);
+        color: var(--text-btn);
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .badge-id {
+        background-color: var(--accent-dim);
+        color: var(--accent);
+        font-weight: 600;
+        border-radius: var(--radius-sm);
+    }
+
+    .btn-primary-custom {
+        background-color: var(--accent);
+        border: none;
+        color: var(--text-btn);
+        border-radius: var(--radius-md);
+    }
+
+    .btn-primary-custom:hover {
+        background: var(--accent-hover);
+        box-shadow: 0 0 10px var(--shadow-md);
+        color: var(--text-btn);
+    }
+
+    .btn-secondary-custom {
+        background: var(--accent-dim2);
+        border: 1px solid var(--border);
+        color: var(--text-btn) !important;
+        border-radius: var(--radius-md);
+    }
+
+    .btn-secondary-custom:hover {
+        background: var(--dim2-hover);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .diagnosis-benign {
+        color: var(--accent-dim2);
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .diagnosis-malignant {
+        color: #e53935;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .viewport-center {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 40px 20px;
+    }
+
+    .summary-box {
+        background-color: var(--bg-raised);
+        border-left: 4px solid var(--accent);
+        padding: 15px;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .summary-box p:first-child {
+        color: var(--accent);
+    }
+
+    .alert {
+        border-radius: var(--radius-sm);
+    }
+
+    img {
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+    }
+</style>
+
+<div class="viewport-center">
+    <div class="card report-card w-100">
+
+        <div class="report-header p-4">
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <h2 class="mb-0 fw-bold">Clinical Diagnostic Report</h2>
+                    <small class="opacity-75">AI-powered Online Thyroid Nodule Disease Analysis Tool</small>
+
+                    <div class="mt-2">
+                        <span class="badge badge-id p-2">
+                            Diagnosis ID: {{ report_display_id }}
+                        </span>
+
+                        <span class="badge bg-light text-dark p-2">
+                            Report # {{ user_report_no }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <p class="mb-1">
+                        <strong>Name:</strong> {{ passed_name }}
+                    </p>
+
+                    <p class="mb-0 small opacity-75">
+                        {{ date_time|localtime|date:"D, d M Y" }} |
+                        {{ date_time|localtime|time:"H:i" }}
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card-body p-4">
+
+            <div class="row">
+
+                <div class="col-md-5 text-center mb-4">
+                    <div class="p-2 border rounded" style="background: var(--bg-surface);">
+                        <img src="{{ image_url }}" class="img-fluid" alt="Scan"
+                            style="max-height: 300px; width: 100%; object-fit: cover;">
+                        <p class="mt-2 mb-2 small" style="color: var(--text-secondary);">
+                            Original Ultrasound Input
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <h5 class="fw-bold mb-3">Analysis Results</h5>
+
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <td style="color: var(--text-secondary);" class="w-50">AI Prediction:</td>
+                            <td>
+                                <span
+                                    class="{% if prediction == 'malignant' %}diagnosis-malignant{% else %}diagnosis-benign{% endif %} fs-5">
+                                    {{ prediction }}
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="color: var(--text-secondary);">Gender:</td>
+                            <td class="fw-bold">{{ gender }}</td>
+                        </tr>
+
+                        <tr>
+                            <td style="color: var(--text-secondary);">Age:</td>
+                            <td class="fw-bold">{{ age }} Years</td>
+                        </tr>
+
+                        <tr>
+                            <td style="color: var(--text-secondary);">Weight:</td>
+                            <td class="fw-bold">{{ weight }} kg</td>
+                        </tr>
+                    </table>
+
+                    <div class="summary-box mt-3">
+                        <p class="mb-1 small fw-bold text-uppercase">AI Summary</p>
+                        <p class="mb-0 small">{{ summary }}</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="alert alert-warning mt-4 py-2 small d-flex align-items-center">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                This report is AI-generated and should be verified by a certified radiologist
+            </div>
+
+            <div class="mt-4 pt-3 border-top d-flex gap-3 justify-content-center"
+                style="@media (max-width: 425px){flex-direction: column-reverse !important;}">
+
+                <a href="{% url 'diagnosisform' %}" class="btn btn-secondary-custom px-4 rounded-pill"
+                    style="width: 100%;">
+                    Perform New Scan
+                </a>
+
+                <form method="POST" action="{% url 'download_pdf' report_id %}" style="width: 100%;">
+                    {% csrf_token %}
+                    <input type="hidden" name="passed_name" value="{{ passed_name }}">
+                    <input type="hidden" name="prediction" value="{{ prediction }}">
+                    <input type="hidden" name="gender" value="{{ gender }}">
+                    <input type="hidden" name="age" value="{{ age }}">
+                    <input type="hidden" name="weight" value="{{ weight }}">
+                    <input type="hidden" name="date_time" value="{{ date_time }}">
+                    <input type="hidden" name="image_path" value="{{ image_path }}">
+                    <input type="hidden" name="report_id" value="{{ report_display_id }}">
+                    <input type="hidden" name="user_report_no" value="{{ user_report_no }}">
+
+                    <button type="submit" class="btn btn-primary-custom px-5 rounded-pill shadow-sm"
+                        style="width: 100%;">
+                        <i class="bi bi-file-earmark-pdf me-1" style="width: 100%;"></i>
+                        Download Report (PDF)
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

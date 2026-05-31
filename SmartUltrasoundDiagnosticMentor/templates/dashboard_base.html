@@ -1,0 +1,188 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Smart Ultrasound Diagnostic Mentor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/darktheme.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'images/logo2.png' %}">
+</head>
+
+<body>
+    <div class="layout">
+        {% csrf_token %}
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-top">
+                <button class="close-btn" onclick="toggleSidebar()">&times;</button>
+                <div class="logo">
+                    <h2>Smart Ultrasound <br> Diagnostic Mentor</h2>
+                </div>
+
+                <nav>
+                    <a href="{% url 'dashboard' %}"><i class="fas fa-chart-pie"></i> Dashboard</a>
+                    <a href="{% url 'view_appointment' %}"><i class="fas fa-calendar-plus"></i> Appointments</a>
+                    <a href="{% url 'view_ultrasound_images' %}"><i class="fas fa-microscope"></i> Ultrasound Images</a>
+                    <a href="{% url 'view_reports' %}"><i class="fas fa-file-invoice"></i> Reports</a>
+                    <a href="{% url 'view_scan_history' %}"><i class="fas fa-wave-square"></i> Scans</a>
+                </nav>
+            </div>
+
+            <div class="sidebar-bottom">
+                <a href="{% url 'home' %}" class="home-btn">
+                    <i class="fas fa-home-alt"></i> Home
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Area -->
+        <div class="main">
+
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="leftbar">
+                    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+                </div>
+                <div class="rightbar">
+                    <h3>{{ request.user.username }}</h3>
+
+                    <label class="ui-switch me-2">
+                        <input type="checkbox" id="theme-toggle">
+                        <div class="slider">
+                            <div class="circle"></div>
+                        </div>
+                    </label>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <section class="content">
+                {% block content %}
+                {% endblock %}
+            </section>
+    {% include 'footer2.html' %}
+
+        </div>
+        
+    </div>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            // This handles the desktop 'collapse' and the mobile 'slide-in'
+            sidebar.classList.toggle("collapsed");
+            sidebar.classList.toggle("active");
+        }
+
+    </script>
+    <script>
+        const toggleSwitch = document.getElementById("theme-toggle");
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem("theme");
+
+        if (savedTheme === "dark") {
+            document.body.classList.add("dark-mode");
+            toggleSwitch.checked = true;
+        }
+
+        // Auto detect system theme (only if no saved theme)
+        if (!savedTheme) {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add("dark-mode");
+                toggleSwitch.checked = true;
+            }
+        }
+
+        // Toggle theme on switch change
+        toggleSwitch.addEventListener("change", () => {
+            if (toggleSwitch.checked) {
+                document.body.classList.add("dark-mode");
+                localStorage.setItem("theme", "dark");
+            } else {
+                document.body.classList.remove("dark-mode");
+                localStorage.setItem("theme", "light");
+            }
+        });
+
+        // Record Bookmarking Handler
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.addEventListener('click', async (e) => {
+                const btn = e.target.closest('.bm-btn');
+                if (!btn) return;
+                
+                console.log('Bookmark button clicked', btn.dataset.type, btn.dataset.id);
+                
+                e.preventDefault();
+                e.stopPropagation();
+
+                const recordType = btn.dataset.type;
+                const recordId = btn.dataset.id;
+                const csrftoken = getCookie('csrftoken') || document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+
+                if (!csrftoken) {
+                    console.error('CSRF token not found');
+                    alert('Error: Security token missing. Please refresh the page.');
+                    return;
+                }
+
+                // Visual feedback immediate
+                btn.style.opacity = '0.5';
+                btn.disabled = true;
+
+                try {
+                    const url = `/record-bookmark/${recordType}/${recordId}/`;
+                    console.log('Fetching:', url);
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrftoken,
+                            'Content-Type': 'application/json',
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const errText = await response.text();
+                        console.error('Response not ok:', response.status, errText);
+                        throw new Error('Network response was not ok');
+                    }
+                    
+                    const data = await response.json();
+                    console.log('Response data:', data);
+                    
+                    if (data.bookmarked) {
+                        btn.classList.add('bookmarked');
+                    } else {
+                        btn.classList.remove('bookmarked');
+                    }
+                } catch (error) {
+                    console.error('Error toggling bookmark:', error);
+                    alert('Failed to save bookmark. Please check your connection.');
+                } finally {
+                    btn.style.opacity = '1';
+                    btn.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,335 @@
+{% extends "navbar.html" %}
+{% load static %}
+
+{% block title %}Our Doctors{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'home/doctors.css' %}">
+{% endblock %}
+
+{% block start2 %}
+<div class="page">
+
+    <div class="pg-header">
+        <div>
+            <h1>Our Doctors</h1>
+            <p>Find and book appointments with our specialist physicians</p>
+        </div>
+    </div>
+
+    <div class="filter-bar">
+        <div class="search-wrap">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+            </svg>
+            <input type="text" id="search-input" placeholder="Search by name, degree, or location..."
+                onkeyup="filterDoctors()">
+        </div>
+        <select class="filter-select" id="gender-filter" onchange="filterDoctors()">
+            <option value="">All Genders</option>
+            <option value="m">Male</option>
+            <option value="f">Female</option>
+        </select>
+        <select class="filter-select" id="exp-filter" onchange="filterDoctors()">
+            <option value="0">Any Experience</option>
+            <option value="1">1+ Years</option>
+            <option value="2">2+ Years</option>
+            <option value="5">5+ Years</option>
+            <option value="10">10+ Years</option>
+        </select>
+    </div>
+
+    <div class="grid" id="docs-grid">
+        {% for doctor in doctors %}
+        <div class="doc-card" data-id="{{ doctor.id }}" data-name="{{ doctor.user.get_full_name|lower }}"
+            data-gender="{% if doctor.gender == 'male' %}m{% elif doctor.gender == 'female' %}f{% endif %}"
+            data-exp="{{ doctor.experience }}" data-degrees="{{ doctor.degrees|lower }}"
+            data-location="{{ doctor.office_location|lower }}">
+
+            <div class="card-top">
+                <div class="avatar {{ doctor.gender|lower }}">
+                    {% if doctor.profile_photo %}
+                    <img src="{{ doctor.profile_photo.url }}" alt="{{ doctor.user.get_full_name }}">
+                    {% else %}
+                    {{ doctor.user.first_name|first }}{{ doctor.user.last_name|first }}
+                    {% endif %}
+                </div>
+                <button class="bm-btn {% if doctor.is_bookmarked %}saved{% endif %}"
+                    onclick="toggleBookmark(this, '{{ doctor.id }}')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="card-body">
+                <div class="doc-name" style="display: flex; align-items: center; gap: 8px;">
+                    Dr. {{ doctor.user.get_full_name }}
+                    {% if doctor.is_available %}
+                    <span style="color: #10b981; font-size: 0.75rem; font-weight: bold; background: rgba(16, 185, 129, 0.1); padding: 2px 6px; border-radius: 4px;">Available</span>
+                    {% else %}
+                    <span style="color: #ef4444; font-size: 0.75rem; font-weight: bold; background: rgba(239, 68, 68, 0.1); padding: 2px 6px; border-radius: 4px;">Unavailable</span>
+                    {% endif %}
+                </div>
+                <div class="doc-degree">{{ doctor.degrees }}</div>
+
+                <div class="stars" title="{{ doctor.average_rating }} / 5">
+                    {% for i in "12345" %}
+                    <svg class="star" width="14" height="14" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                            fill="{% if forloop.counter <= doctor.average_rating|add:0 %}#f59e0b{% else %}none{% endif %}"
+                            stroke="{% if forloop.counter <= doctor.average_rating|add:0 %}#f59e0b{% else %}#d1d5db{% endif %}"
+                            stroke-width="1.5" />
+                    </svg>
+                    {% endfor %}
+                    <span class="rating-count">{{ doctor.average_rating }} ({{ doctor.total_reviews }})</span>
+                </div>
+
+                <div class="exp-badge">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 6v6l4 2" />
+                    </svg>
+                    {{ doctor.experience }} years experience
+                </div>
+
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
+                        <span>{{ doctor.user.email }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.81 19.79 19.79 0 012 2.18 2 2 0 014 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+                        </svg>
+                        <span>{{ doctor.phone }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                        <span>{{ doctor.office_location }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span>{{ doctor.gender }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <a href="{% url 'doctor_profile' doctor.id %}" class="btn-sm btn-book"
+                    style="width: 100%; text-align: center;">See full profile</a>
+            </div>
+
+        </div>
+        {% empty %}
+        <div class="no-results">No doctors found.</div>
+        {% endfor %}
+        <!-- NEW: No results message -->
+        <div class="no-results" id="no-results-msg" style="display:none;">
+            No records found
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function starsSVG(rating, size = 14, interactive = false, docId = null, type = 'display') {
+        let html = '';
+        for (let i = 1; i <= 5; i++) {
+            const filled = i <= Math.round(rating);
+            if (interactive) {
+                html += `<svg class="${type == 'review' ? 'rstar' : 'star'}" width="${size}" height="${size}" viewBox="0 0 24 24" onclick="${type == 'review' ? `setReviewStar(${docId},${i})` : `rateDoc(${docId},${i})`}" style="cursor:pointer">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+          fill="${filled ? '#f59e0b' : 'none'}" stroke="${filled ? '#f59e0b' : '#d1d5db'}" stroke-width="1.5"/>
+      </svg>`;
+            } else {
+                html += `<svg class="star" width="${size}" height="${size}" viewBox="0 0 24 24">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+          fill="${i <= Math.floor(rating) ? '#f59e0b' : (i - 0.5 <= rating ? 'url(#half)' : 'none')}" stroke="${i <= rating ? '#f59e0b' : '#d1d5db'}" stroke-width="1.5"/>
+      </svg>`;
+            }
+        }
+        return html;
+    }
+    var reviewStars = {};
+
+    /* ── Filter ── */
+    function filterDoctors() {
+        var searchVal = document.getElementById('search-input').value.toLowerCase().trim();
+
+        // Normalize search (remove Dr, doctor, etc.)
+        searchVal = searchVal.replace(/\b(dr|doctor|do|doc|doct|docto)\.?/g, '').trim();
+
+        var genderVal = document.getElementById('gender-filter').value.toLowerCase().trim();
+        var expVal = parseInt(document.getElementById('exp-filter').value) || 0;
+
+        var cards = document.querySelectorAll('.doc-card');
+        var visibleCount = 0;
+
+        cards.forEach(function (card) {
+            var name = (card.getAttribute('data-name') || '').toLowerCase().trim();
+            name = name.replace(/\b(dr|doctor)\.?\b/g, '').trim();
+
+            var degrees = (card.getAttribute('data-degrees') || '').toLowerCase().trim();
+            var location = (card.getAttribute('data-location') || '').toLowerCase().trim();
+            var gender = (card.getAttribute('data-gender') || '').trim();
+            var exp = parseInt(card.getAttribute('data-exp')) || 0;
+
+            var matchSearch = !searchVal ||
+                name.includes(searchVal) ||
+                degrees.includes(searchVal) ||
+                location.includes(searchVal);
+
+            var matchGender = !genderVal || gender === genderVal;
+            var matchExp = exp >= expVal;
+
+            if (matchSearch && matchGender && matchExp) {
+                card.style.display = '';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Show/hide "No records found"
+        var msg = document.getElementById('no-results-msg');
+        if (visibleCount === 0) {
+            msg.style.display = 'block';
+        } else {
+            msg.style.display = 'none';
+        }
+    }
+
+    /* ── Bookmark ── */
+    function toggleBookmark(btn, docId) {
+
+        fetch(`/bookmark/${docId}/`, {
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.saved) {
+                    btn.classList.add('saved');
+                } else {
+                    btn.classList.remove('saved');
+                }
+            });
+    }
+
+    /* ── Review panel toggle ── */
+    function toggleReview(id) {
+        document.querySelectorAll('.review-panel').forEach(p => {
+            if (p.id !== 'rp-' + id) {
+                p.classList.remove('open');
+            }
+        });
+
+        var panel = document.getElementById('rp-' + id);
+        if (panel) {
+            panel.classList.toggle('open');
+        }
+    }
+
+    /* ── Star rating in review panel ── */
+    function setReviewStar(docId, val) {
+        reviewStars[docId] = val;
+
+        // SET VALUE IN HIDDEN INPUT
+        document.getElementById('rating-' + docId).value = val;
+
+        for (var i = 1; i <= 5; i++) {
+            var path = document.getElementById('rstar-' + docId + '-' + i);
+            if (!path) continue;
+
+            if (i <= val) {
+                path.setAttribute('fill', '#f59e0b');
+                path.setAttribute('stroke', '#f59e0b');
+            } else {
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke', '#d1d5db');
+            }
+        }
+    }
+
+    /* ── Submit review (client-side, append to list) ── */
+    function submitReview(id) {
+        var stars = reviewStars[id] || 0;
+        var text = document.getElementById('rt-' + id).value.trim();
+
+        if (!stars) { alert('Please select a star rating.'); return; }
+        if (!text) { alert('Please write a review.'); return; }
+
+        /* Build star SVGs for the new review item */
+        var starHtml = '';
+        for (var i = 1; i <= 5; i++) {
+            starHtml +=
+                '<svg width="11" height="11" viewBox="0 0 24 24">' +
+                '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"' +
+                ' fill="' + (i <= stars ? '#f59e0b' : 'none') + '"' +
+                ' stroke="' + (i <= stars ? '#f59e0b' : '#d1d5db') + '"' +
+                ' stroke-width="1.5"/>' +
+                '</svg>';
+        }
+
+        /* Build the review item element */
+        var item = document.createElement('div');
+        item.className = 'review-item';
+        item.innerHTML =
+            '<div class="ri-top">' +
+            '<span class="ri-name">You</span>' +
+            '<span class="ri-stars">' + starHtml + '</span>' +
+            '</div>' +
+            '<div class="ri-text">' + escapeHtml(text) + '</div>';
+
+        /* Append to list, creating it if it doesn't exist yet */
+        var list = document.getElementById('rl-' + id);
+        if (!list) {
+            list = document.createElement('div');
+            list.className = 'reviews-list';
+            list.id = 'rl-' + id;
+            document.getElementById('rp-' + id).appendChild(list);
+        }
+        list.appendChild(item);
+
+        /* Reset form */
+        document.getElementById('rt-' + id).value = '';
+        setReviewStar(id, 0);
+    }
+
+    /* ── Helpers ── */
+    function escapeHtml(str) {
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function getCookie(name) {
+        var value = '; ' + document.cookie;
+        var parts = value.split('; ' + name + '=');
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return '';
+    }
+</script>
+ {% include 'footer2.html' %}
+{% endblock %}

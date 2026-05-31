@@ -1,0 +1,150 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+
+
+
+<div class="appointment-container">
+
+    <div class="top">
+        <h1 class="title">Ultrasound Images</h1>
+        <div class="search-filter-bar">
+            <!-- Search Input -->
+            <div class="search">
+                <div class="search-box">
+                    <div class="search-field">
+                        <input id="searchInput" placeholder="Search by ID, name or date..." class="input" type="text"
+                            autocomplete="off">
+                        <div class="search-box-icon">
+                            <button class="btn-icon-content">
+                                <i class="search-icon">
+                                    <svg xmlns="://www.w3.org/2000/svg" version="1.1" viewBox="0 0 712 712">
+                                        <path
+                                            d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z">
+                                        </path>
+                                    </svg>
+                                </i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Filter -->
+            <div class="input-group">
+                <!-- <span class="icon">⚡</span> -->
+                <select id="monthFilter">
+                    <option value="">Months</option>
+                    <option value="January">January</option>
+                    <option value="February">February</option>
+                    <option value="March">March</option>
+                    <option value="April">April</option>
+                    <option value="May">May</option>
+                    <option value="June">June</option>
+                    <option value="July">July</option>
+                    <option value="August">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    {% if images %}
+
+    <div class="table-wrapper">
+        <table>
+
+            <tr>
+                <th>ID</th>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Image</th>
+                <th>Save</th>
+            </tr>
+
+            {% for image in images %}
+            <tr class="image-row">
+
+                <td class="id-cell">#{{ image.id }}</td>
+
+                <td class="name-cell">
+                    {{ image.display_name }}
+                </td>
+
+                <td class="doctor-cell">
+                    {% if image.doctor %}
+                        Dr. {{ image.doctor.user.get_full_name }}
+                    {% else %}
+                        Unassigned
+                    {% endif %}
+                </td>
+
+                <td class="date-cell">{{ image.image_date }}</td>
+
+                <td>
+                    {% if image.image %}
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <img src="{{ image.image.url }}" width="60" height="60"
+                            style="object-fit:cover; border-radius:6px;">
+                        <a href="{{ image.image.url }}" download class="btn-main"><i class="fas fa-download"></i> Download</a>
+                    </div>
+                    {% else %}
+                    No Image
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="bm-btn{% if image.id in bookmarked_ids %} bookmarked{% endif %}"
+                        data-type="image" data-id="{{ image.id }}"
+                        title="Bookmark this record">
+                        <i class="fas fa-bookmark"></i>
+                    </button>
+                </td>
+
+            </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
+    {% else %}
+    <p>No image available.</p>
+    {% endif %}
+
+</div>
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const monthFilter = document.getElementById("monthFilter");
+
+    const rows = document.querySelectorAll(".image-row");
+
+    function filterTable() {
+        const searchValue = searchInput.value.toLowerCase().trim();
+        const monthValue = monthFilter.value.toLowerCase();
+
+        rows.forEach(row => {
+            const id = row.querySelector(".id-cell")?.innerText.toLowerCase() || "";
+            const name = row.querySelector(".name-cell")?.innerText.toLowerCase() || "";
+            const date = row.querySelector(".date-cell")?.innerText.toLowerCase() || "";
+
+            const matchesSearch =
+                !searchValue ||
+                id.includes(searchValue) ||
+                name.includes(searchValue) ||
+                date.includes(searchValue);
+
+            const matchesMonth =
+                !monthValue ||
+                date.includes(monthValue); // month filter
+
+            row.style.display = (matchesSearch && matchesMonth) ? "" : "none";
+        });
+    }
+
+    searchInput.addEventListener("input", filterTable);
+    monthFilter.addEventListener("change", filterTable);
+</script>
+{% endblock %}

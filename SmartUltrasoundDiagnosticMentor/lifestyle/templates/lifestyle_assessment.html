@@ -1,0 +1,131 @@
+{% extends "navbar.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'lifestyle/lifestyle.css' %}">
+{% endblock %}
+{% block start2 %}
+
+<div class="lifestyle-container" style="align-items: center;">
+    <div class="top-header"
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;text-align: center">
+        <div>
+            <h1>Smart Life Assessment</h1>
+            <p class="text-secondary">Help us tailor your lifestyle recommendations by completing your health profile.
+            </p>
+        </div>
+    </div>
+
+    <div class="assessment-form-container">
+        <form method="POST">
+            {% csrf_token %}
+
+            <h4
+                style="margin-bottom: 25px; color: var(--accent); border-bottom: 2px solid var(--accent-glow); padding-bottom: 10px;">
+                <i class="fas fa-user-md"></i> Core Information
+            </h4>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>{{ form.age.label }}</label>
+                    {{ form.age }}
+                </div>
+                <div class="form-group">
+                    <label>{{ form.gender.label }}</label>
+                    {{ form.gender }}
+                </div>
+                <div class="form-group">
+                    <label>{{ form.weight.label }}</label>
+                    {{ form.weight }}
+                </div>
+                <div class="form-group">
+                    <label>{{ form.height.label }}</label>
+                    {{ form.height }}
+                </div>
+            </div>
+
+            <h4
+                style="margin-top: 30px; margin-bottom: 25px; color: var(--accent); border-bottom: 2px solid var(--accent-glow); padding-bottom: 10px;">
+                <i class="fas fa-heartbeat"></i> Habits & Wellness
+            </h4>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>{{ form.activity_level.label }}</label>
+                    {{ form.activity_level }}
+                </div>
+                <div class="form-group">
+                    <label>{{ form.dietary_preference.label }}</label>
+                    {{ form.dietary_preference }}
+                </div>
+                <div class="form-group">
+                    <label>{{ form.smoking_status.label }}</label>
+                    <div style="margin-top: 10px;">
+                        {{ form.smoking_status }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>{{ form.alcohol_consumption.label }}</label>
+                    {{ form.alcohol_consumption }}
+                </div>
+            </div>
+
+            <h4
+                style="margin-top: 30px; margin-bottom: 25px; color: var(--accent); border-bottom: 2px solid var(--accent-glow); padding-bottom: 10px;">
+                <i class="fas fa-notes-medical"></i> Medical Context
+            </h4>
+
+            <div class="form-group">
+                <label>{{ form.health_conditions.label }}</label>
+                {{ form.health_conditions }}
+            </div>
+
+            <div class="form-group">
+                <label>{{ form.allergies.label }}</label>
+                {{ form.allergies }}
+            </div>
+
+            <h4
+                style="margin-top: 30px; margin-bottom: 25px; color: var(--accent); border-bottom: 2px solid var(--accent-glow); padding-bottom: 10px;">
+                <i class="fas fa-bed"></i> Sleep Routine
+            </h4>
+
+            <div class="form-group">
+                <label>{{ form.hours_of_sleep.label }}</label>
+                {{ form.hours_of_sleep }}
+            </div>
+
+            <h4
+                style="margin-top: 30px; margin-bottom: 25px; color: var(--accent); border-bottom: 2px solid var(--accent-glow); padding-bottom: 10px;">
+                <i class="fas fa-utensils"></i> Detailed Daily Diet
+            </h4>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>{{ form.breakfast.label }}</label>
+                    {{ form.breakfast }}
+                </div>
+                <div class="form-group">
+                    <label>{{ form.lunch.label }}</label>
+                    {{ form.lunch }}
+                </div>
+                <div class="form-group">
+                    <label>{{ form.dinner.label }}</label>
+                    {{ form.dinner }}
+                </div>
+                <div class="form-group">
+                    <label>{{ form.other_routine.label }}</label>
+                    {{ form.other_routine }}
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <button type="submit" class="btn-lifestyle">
+                    Update Profile & Generate Recommendations
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% include 'footer2.html' %}
+{% endblock %}

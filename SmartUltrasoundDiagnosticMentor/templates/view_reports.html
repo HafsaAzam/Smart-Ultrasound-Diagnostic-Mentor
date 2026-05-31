@@ -1,0 +1,170 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+
+
+<div class="appointment-container">
+
+    <div class="top">
+        <h1 class="title">Diagnostic Reports</h1>
+        <div class="search-filter-bar" style="flex-direction: column;">
+            <!-- Search Input -->
+            <div class="search">
+                <div class="search-box">
+                    <div class="search-field">
+                        <input id="searchInput" placeholder="Search by id, name or age..." class="input" type="text">
+                        <div class="search-box-icon">
+                            <button class="btn-icon-content">
+                                <i class="search-icon">
+                                    <svg xmlns="://www.w3.org/2000/svg" version="1.1" viewBox="0 0 712 712">
+                                        <path
+                                            d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z">
+                                        </path>
+                                    </svg>
+                                </i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; column-gap: 5px;">
+                <!-- Status Filter -->
+                <div class="input-group">
+                    <select id="genderFilter">
+                        <option value="">Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <select id="statusFilter">
+                        <option value="">Prediction</option>
+                        <option value="Malignant">Malignant</option>
+                        <option value="Benign">Benign</option>
+                        <option value="Normal">Normal</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <select id="monthFilter">
+                        <option value="">Months</option>
+                        <option value="Januaury">Januaury</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="Decemver">Decemver</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% if reports %}
+
+    <div class="table-wrapper">
+        <table>
+
+            <tr>
+                <th>Report ID</th>
+                <th>Patient</th>
+                <th>Prediction</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Date</th>
+                <th>Image</th>
+                <th></th>
+                <th>Save</th>
+            </tr>
+
+            {% for report in reports %}
+            <tr class="report-row">
+                <td class="id-cell">DX-{{ report.id|stringformat:"04d" }}</td>
+
+                <td class="name-cell">
+                    {{ report.patient_name|default:report.user.get_full_name|default:report.user.username }}
+                </td>
+
+                <td class="prediction-cell">{{ report.prediction }}</td>
+                <td class="age-cell">{{ report.age }}</td>
+                <td class="gender-cell">{{ report.gender }}</td>
+                <td class="date-cell">{{ report.report_date }}</td>
+
+                <td>
+                    {% if report.image and report.image.image %}
+                    <img src="{{ report.image.image.url }}" width="60" height="60"
+                        style="object-fit:cover; border-radius:6px;">
+                    {% else %}
+                    No Image
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'download_pdf' report.id %}">
+                        <button class="action-btn accept-btn">Download PDF</button>
+                    </a>
+                </td>
+                <td>
+                    <button class="bm-btn{% if report.id in bookmarked_ids %} bookmarked{% endif %}" data-type="report"
+                        data-id="{{ report.id }}" title="Bookmark this record">
+                        <i class="fas fa-bookmark"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
+    {% else %}
+    <p>No diagnostic reports available.</p>
+    {% endif %}
+
+</div>
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const statusFilter = document.getElementById("statusFilter");
+    const genderFilter = document.getElementById("genderFilter");
+    const monthFilter = document.getElementById("monthFilter");
+
+
+    const rows = document.querySelectorAll(".report-row");
+
+    function filterTable() {
+        const searchValue = searchInput.value.toLowerCase();
+
+        const statusValue = statusFilter.value.toLowerCase();
+        const genderValue = genderFilter.value.toLowerCase();
+        const monthValue = monthFilter.value.toLowerCase();
+
+
+        rows.forEach(row => {
+            const id = row.querySelector(".id-cell").innerText.toLowerCase();
+            const name = row.querySelector(".name-cell").innerText.toLowerCase();
+            const age = row.querySelector(".age-cell").innerText.toLowerCase();
+
+            const status = row.querySelector(".prediction-cell").innerText.toLowerCase();
+            const gender = row.querySelector(".gender-cell").innerText.toLowerCase();
+            const month = row.querySelector(".date-cell").innerText.toLowerCase();
+
+            const matchesSearch = id.includes(searchValue) || age.includes(searchValue) || name.includes(searchValue);
+            const matchesStatus = statusValue === "" || status.includes(statusValue);
+            const matchesMonth = monthValue === "" || month.includes(monthValue);
+            const matchesGender = genderValue === "" || gender === genderValue;
+
+            row.style.display = (matchesSearch && matchesStatus && matchesMonth && matchesGender) ? "" : "none";
+        });
+    }
+
+    searchInput.addEventListener("input", filterTable);
+    statusFilter.addEventListener("change", filterTable);
+    genderFilter.addEventListener("change", filterTable);
+    monthFilter.addEventListener("change", filterTable);
+
+</script>
+{% endblock %}

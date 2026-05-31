@@ -1,0 +1,139 @@
+{% extends "navbar.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/profile_view.css' %}">
+
+{% endblock %}
+
+{% block start2 %}
+<div class="box2 profile-card">
+    <form method="POST" enctype="multipart/form-data" style="width: 100%;">
+        <div class="profile-card-row">
+        <!-- LEFT SIDE -->
+            <div class="profile-avatar" style="width: 50%;">
+
+                <div class="avatar-wrapper">
+
+                    <!-- Profile Image OR Initials -->
+                    {% if profile.profile_photo %}
+                    <img src="{{ profile.profile_photo.url }}" class="avatar-img">
+                    {% else %}
+                    <div class="avatar-circle">
+                        {{ request.user.first_name|slice:":1" }}
+                        {{ request.user.last_name|slice:":1" }}
+                    </div>
+                    {% endif %}
+
+                    <!-- Hidden File Input -->
+                    <input type="file" name="profile_photo" id="profilePhotoInput" hidden>
+
+                    <!-- Plus Button -->
+                    <div class="avatar-upload-btn" onclick="document.getElementById('profilePhotoInput').click()">
+                        +
+                    </div>
+
+                </div>
+
+                <h2 class="profile-title">
+                    {{ request.user.get_full_name }}
+                </h2>
+                <p><strong>Doctor</strong></p>
+                <div style="width: 100%;">
+                    <div class="info-row">
+                        <span class="label">Gender</span>
+                        <select name="gender" class="input-box">
+                            <option value="male" {% if profile.gender == "male" %}selected{% endif %}>Male</option>
+                            <option value="female" {% if profile.gender == "female" %}selected{% endif %}>Female</option>
+                        </select>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="label">Age</span>
+                        <input class="input-box" type="number" name="age" value="{{ profile.age }}">
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Weight (kg)</span>
+                        <input class="input-box" type="number" step="0.1" name="weight" value="{{ profile.weight }}">
+                    </div>
+                    <div class="info-row" style="border-bottom: none;">
+                        <span class="label">Height (cm)</span>
+                        <input class="input-box" type="number" step="0.1" name="height" value="{{ profile.height }}">
+                    </div>
+                </div>
+            </div>
+            <!-- RIGHT SIDE -->
+            <div class="profile-info">
+
+                {% csrf_token %}
+                <div class="info-row">
+                        <span class="label">Phone</span>
+                        <input class="input-box" type="text" placeholder="0000-0000000" name="phone"
+                            value="{{ profile.phone }}">
+                    </div>
+
+                <div class="info-row">
+                    <span class="label">Office Location</span>
+                    <input class="input-box" type="text" placeholder="123 Main St, Suite 100, City, Country"
+                        name="office_location" value="{{ profile.office_location }}"  style="width: 75%;">
+                </div>
+                <div class="info-row">
+                    <span class="label">Degrees</span>
+                    <input class="input-box" type="text" name="degrees" value="{{ profile.degrees }}"  style="width: 75%;">
+                </div>
+                <div class="info-row">
+                    <span class="label">Experience</span>
+                    <input class="input-box" type="number" name="experience" value="{{ profile.experience }}" style="width: 75%;">
+                </div>
+                <div class="info-row" style="align-items: center; display: flex;">
+                    <span class="label">Available for Appointments</span>
+                    <input type="checkbox" name="is_available" {% if profile.is_available %}checked{% endif %} style="width: 20px; height: 20px; margin-left: 10px; accent-color: var(--primary);">
+                </div>
+                <div class="info-row">
+                    <span class="label">Degree Document</span>
+                    <input type="file" name="degree_document"  style="width: 75%;">
+                </div>
+
+                {% if profile.degree_document %}
+                <div style="margin-top:15px;">
+                    <span class="label">Current Degree Document:</span><br>
+                    {% if profile.degree_document.url|lower|slice:"-4:" == ".pdf" %}
+                    <a href="{{ profile.degree_document.url }}" target="_blank" class="value">View PDF Document</a>
+                    {% else %}
+                    <img src="{{ profile.degree_document.url }}"
+                        style="margin-top:10px;max-width:150px;border-radius:8px;max-height: 150px;">
+                    {% endif %}
+                </div>
+                {% endif %}
+
+
+            </div>
+        </div>
+         <button class="trigger-btn" type="submit">
+            Update Profile
+        </button>
+        </div>
+       
+    </form>
+
+</div>
+<script>
+    document.getElementById("profilePhotoInput").addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const avatar = document.querySelector(".avatar-img") || document.querySelector(".avatar-circle");
+
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.className = "avatar-img";
+
+                avatar.replaceWith(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+ {% include 'footer2.html' %}
+{% endblock %}

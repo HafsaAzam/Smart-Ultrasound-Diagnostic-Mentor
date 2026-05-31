@@ -1,0 +1,187 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+
+<div class="appointment-container">
+    <div class="top">
+        <h1 class="title">My Appointments</h1>
+        <div class="search-filter-bar">
+            <!-- Search Input -->
+            <div class="search">
+                <div class="search-box">
+                    <div class="search-field">
+                        <input id="searchInput" placeholder="Search by name, email or date..." class="input" type="text">
+                        <div class="search-box-icon">
+                            <button class="btn-icon-content">
+                                <i class="search-icon">
+                                    <svg xmlns="://www.w3.org/2000/svg" version="1.1" viewBox="0 0 712 712">
+                                        <path
+                                            d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z">
+                                        </path>
+                                    </svg>
+                                </i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Filter -->
+            <div class="input-group">
+                <select id="monthFilter">
+                    <option value="">All Months</option>
+                    <option value="january">January</option>
+                    <option value="february">February</option>
+                    <option value="march">March</option>
+                    <option value="april">April</option>
+                    <option value="may">May</option>
+                    <option value="june">June</option>
+                    <option value="july">July</option>
+                    <option value="august">August</option>
+                    <option value="september">September</option>
+                    <option value="october">October</option>
+                    <option value="november">November</option>
+                    <option value="december">December</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <!-- <span class="icon">⚡</span> -->
+                <select id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="accepted">Accepted</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="done">Done</option>
+                    <option value="missed">Missed</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    {% if appointments %}
+
+    <div class="table-wrapper">
+        <table>
+
+            <tr>
+                <th>Person</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Action</th>
+                <th>Save</th>
+            </tr>
+
+            {% for appointment in appointments %}
+            <tr class="appointment-row">
+                {% if appointment.patient == request.user %}
+                <td class="name-cell">Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.username }}</td>
+                <td class="email-cell">{{ appointment.doctor.user.email }}</td>
+                <td>{{ appointment.doctor.phone|default:"-" }}</td>
+                {% else %}
+                <td class="name-cell">{{ appointment.patient_name }}</td>
+                <td class="email-cell">{{ appointment.email }}</td>
+                <td>{{ appointment.phone }}</td>
+                {% endif %}
+                
+                <td class="date-cell">{{ appointment.appointment_date }}</td>
+                <td>{{ appointment.appointment_time }}</td>
+
+                <td class="status-cell">
+                    {% if appointment.is_done %}
+                    <span class="status done">Done</span>
+                    {% elif appointment.is_missed %}
+                    <span class="status missed">Missed</span>
+                    {% elif appointment.status == "pending" %}
+                    <span class="status pending">Pending</span>
+                    {% elif appointment.status == "accepted" %}
+                    <span class="status accepted">Accepted</span>
+                    {% elif appointment.status == "rejected" %}
+                    <span class="status rejected">Rejected</span>
+                    {% endif %}
+                </td>
+
+                <td style="display: flex;flex-direction: column;row-gap: 8px;">
+                    {% if appointment.doctor.user == request.user %}
+                        {% if appointment.is_missed %}
+                        <span class="status missed" style="text-align: center;">Missed</span>
+                        {% elif appointment.status == "pending" %}
+                        <a href="{% url 'accept_appointment' appointment.id %}">
+                            <button class="action-btn accept-btn" style="width: 100%;">Accept</button>
+                        </a>
+                        <a href="{% url 'reject_appointment' appointment.id %}">
+                            <button class="action-btn reject-btn" style="width: 100%;">Reject</button>
+                        </a>
+                        {% else %}
+                        <span class="no-action">No Action</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="no-action">-</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="bm-btn{% if appointment.id in bookmarked_ids %} bookmarked{% endif %}"
+                        data-type="appointment" data-id="{{ appointment.id }}"
+                        title="Bookmark this record">
+                        <i class="fas fa-bookmark"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <p>No appointments yet.</p>
+
+    {% endif %}
+
+</div>
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const monthFilter = document.getElementById("monthFilter");
+    const statusFilter = document.getElementById("statusFilter");
+
+    const rows = document.querySelectorAll(".appointment-row");
+
+    function filterTable() {
+        const searchValue = searchInput.value.toLowerCase().trim();
+        const statusValue = statusFilter.value.toLowerCase();
+        const monthValue = monthFilter.value.toLowerCase();
+
+        rows.forEach(row => {
+            const name = row.querySelector(".name-cell")?.innerText.toLowerCase() || "";
+            const email = row.querySelector(".email-cell")?.innerText.toLowerCase() || "";
+            const date = row.querySelector(".date-cell")?.innerText.toLowerCase() || "";
+            const status = row.querySelector(".status-cell")?.innerText.toLowerCase() || "";
+
+            // 🔍 Search (name, email, date)
+            const matchesSearch =
+                !searchValue ||
+                name.includes(searchValue) ||
+                email.includes(searchValue) ||
+                date.includes(searchValue);
+
+            // 📌 Status filter
+            const matchesStatus =
+                !statusValue ||
+                status.includes(statusValue);
+
+            // 📅 Month filter (checks month text inside date)
+            const matchesMonth =
+                !monthValue ||
+                date.includes(monthValue);
+
+            row.style.display = (matchesSearch && matchesStatus && matchesMonth) ? "" : "none";
+        });
+    }
+
+    searchInput.addEventListener("input", filterTable);
+    statusFilter.addEventListener("change", filterTable);
+    monthFilter.addEventListener("change", filterTable);
+</script>
+{% endblock %}
